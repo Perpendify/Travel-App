@@ -1,17 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300;400&display=swap');
+@import "~bootstrap/scss/bootstrap";
+
+
+body {
+    background-color: grey;
+}
 
 .bg {
    background: linear-gradient(0deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url("https://cdn.pixabay.com/photo/2015/11/27/20/28/florence-1066314_1280.jpg"); 
    background-size: cover;
    background-repeat: no-repeat; 
+   background-position-y: bottom;
    z-index: 1;
 
    h1 {
        color: white;
+       font-family: 'Noto Serif SC', serif;
+       font-weight: 200;
    }
    p {
        color: white;
        font-size: 12px;
-       font-weight: 300;
+       font-weight: 200;
        margin-bottom: 7px;
    }
    nav {
@@ -24,7 +34,7 @@
 .btm_card {
     margin-top: -30px;
     z-index: 2;
-    border-radius: 32px;
+    border-radius: 32px 32px 0 0;
 }
 
 .weather_icon {
@@ -51,4 +61,29 @@
 
 .active {
     border: 2px solid white ;
+}
+
+@media (min-width: 1200px) { 
+
+    
+    .bg {
+        height: 100vh;
+    }
+
+    .btn_grp_source {
+        position: absolute;
+        bottom: 10px;
+        display: flex;
+        flex-direction: row-reverse;
+        .img_source {
+            margin-top: auto;
+        }
+    }
+
+
+
+    .mt-xl-n {
+        margin-top: 135px !important;
+    }
+
 }
