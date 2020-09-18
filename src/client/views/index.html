@@ -13,38 +13,39 @@
     <body>
 
         <main class="row no-gutters">
-            <div class="container p-0 pb-5 bg col-xl-8">
-                <nav class="navbar navbar-default navbar-fixed-top">
-                        <a class="navbar-brand" href="#myPage">Logo</a>
-                    </nav>
-                    <h1 class="mt-5 mb-5 ml-3 mt-xl-n"> 
-                        Experience<br> peace of mind at<br> your destination
-                    </h1>
-                    <div class="btn_grp_source">
-                        <p class="ml-3 img_source">Singapore<br> From Photographer123</p>
-                        <div class="ml-3">
-                            <div class="img_button active" id="img_button_1"></div>
-                            <div class="img_button" id="img_button_2"></div>
-                            <div class="img_button" id="img_button_3"></div>
-                            <div class="img_button" id="img_button_4"></div>
-                        </div>
+            <div class="container p-0 pb-5 bg col-xl-8 d-xl-flex flex-row">
+                <nav class="navbar navbar-default navbar-fixed-top d-xl-inline">
+                    <a class="navbar-brand" href="#myPage">Logo</a>
+                </nav>
+                <h1 class="mt-5 mb-5 ml-3 mt-xl-n align-self-xl-center"> 
+                    Experience<br> peace of mind at<br> your destination
+                </h1>
+                <div class="btn_grp_source">
+                    <p class="ml-3 img_source">Singapore<br> From Photographer123</p>
+                    <div class="ml-3">
+                        <div class="img_button active" id="img_button_1"></div>
+                        <div class="img_button" id="img_button_2"></div>
+                        <div class="img_button" id="img_button_3"></div>
+                        <div class="img_button" id="img_button_4"></div>
                     </div>
+                </div>
             </div>
-            <div class="container pt-3 pb-2 btm_card bg-white text-dark main_container col-xl-4">
+            <div class="container pt-3 pb-2 btm_card bg-white text-dark main_container col-xl-4 p-3 pt-3 pt-xl-5 ">
                 <p class="mt-4 mb-4">Find out the weather data when you arrive to your destignation</p>
-                <form>
+                <form id="form">
                     <div class="form-group">
-                      <label for="inputDestination">Destination</label>
-                      <input type="text" class="form-control" id="inputDestination" placeholder="Enter Destination Here">
-                    </div>
-                    <div class="form-group">
+                        <label for="inputDestination">Destination</label>
+                        <input type="text" class="form-control mb-3" id="inputDestination" placeholder="Enter Destination" required>
+                        <input type="hidden" id="loc_lat" />
+                        <input type="hidden" id="loc_long" />
                       <label for="inputDate">Arrival Date</label>
-                      <input type="date" class="form-control" id="inputDate" placeholder="Enter Arrival Date">
+                      <input type="date" class="form-control mb-3" id="inputDate" placeholder="Enter Arrival Date" required>
                     </div>
                     <div class="d-flex align-items-end flex-column">
-                        <button type="submit" class="btn btn-primary pl-5 pr-5 mt-2">Get Data</button>    
+                        <button type="submit" class="btn btn-primary pl-5 pr-5 mt-2" onclick="onSearch()" id="submit1" value="">Get Data</button>    
                     </div>
                 </form>
+                <div id="map-latlng"></div>
 
                 <hr class="mt-4 mb-4">
 
@@ -77,5 +78,69 @@
               });
             }
         </script> -->
+        
+        <script>
+            function onSearch() {
+                var location = document.getElementById('inputDestination');
+                var date = document.getElementById('inputDate');
+                console.log(location.value);
+                console.log(date.value);}
+                // here should be where the api is called for weather data 
+        </script>
+
+        <!-- note: apikey is restricted -->
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&libraries=places"></script>
+        <!-- obtains lat and lon of searched location -->
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            var searchInput = 'inputDestination';
+
+    
+            var autocomplete;
+            autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
+                types: ['geocode'],
+            });
+
+            function getLatLon(){
+                var near_place = autocomplete.getPlace();
+                document.getElementById('loc_lat').value = near_place.geometry.location.lat();
+                document.getElementById('loc_long').value = near_place.geometry.location.lng();
+
+                let lat = near_place.geometry.location.lat();
+                let lon = near_place.geometry.location.lng();
+                return [lat,lon];
+            }
+            
+            google.maps.event.addListener(autocomplete, 'place_changed', getLatLon);;
+            
+
+            const form = document.getElementById('form')
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                let lat = getLatLon()[0];
+                let lon = getLatLon()[1]
+                console.log(lat, lon)
+
+                return fetch(`/forecast/daily?lat=${lat}&lon=${lon}`)
+                .then((res) => res.json())
+                .then((res) => {
+
+                    console.log('this is res:', res)
+
+                })
+                .catch((error) => {
+                // document.getElementById("Error").innerHTML = `Error: ${error}`;
+                console.log('this is error', error);
+                });
+
+            })
+
+
+
+
+
+
+        </script>
     </body>
 </html>

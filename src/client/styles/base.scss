@@ -68,7 +68,11 @@ body {
     
     .bg {
         height: 100vh;
+        h1 {
+            font-size: 4em;
+        }
     }
+
 
     .btn_grp_source {
         position: absolute;
@@ -83,7 +87,7 @@ body {
 
 
     .mt-xl-n {
-        margin-top: 135px !important;
+        // margin-top: 135px !important;
     }
 
 }
