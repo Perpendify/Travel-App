@@ -49,20 +49,21 @@
 
                 <hr class="mt-4 mb-4">
 
-                <h6>Weather on 22 September 2020 in Singapore:</h6>
+                <h6 id="header_title"></h6>
 
-                <div class="container p-2 mb-2 mt-4 bg-primary text-white rounded">
+                <div class="container p-2 mb-2 mt-4 bg-primary text-white rounded d-none" id='weather_card'>
                     <div class="row">
                         <div class="col-7 ml-2">
-                            <div class="weather_icon">icon here</div>
-                            <h6>Sunny</h6>
+                            <div id="weather_icon" class="weather_ icon">icon here</div>
+                            <h6 id="weather">Sunny</h6>
                         </div>
                         <div class="col-4">
-                            <h2>32º</h2>
-                            <p>Feels like 35ª</p>
+                            <h2 id="temp">32º</h2>
+                            <!-- <p id="feels_like">Feels like 35ª</p> -->
                         </div>
                     </div>
                 </div>
+                <div id="ETA"></div>
 
                 <div class="mt-5 text-muted"><small> Ben Erwin Udacity Capstone </small></div>
             </div>
@@ -120,14 +121,15 @@
                 e.preventDefault();
                 let lat = getLatLon()[0];
                 let lon = getLatLon()[1]
-                console.log(lat, lon)
+                // console.log(lat, lon)
 
-                return fetch(`/forecast/daily?lat=${lat}&lon=${lon}`)
+                return fetch(`https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&key=`)
                 .then((res) => res.json())
                 .then((res) => {
-
-                    console.log('this is res:', res)
-
+                    // console.log(res);
+                    // console.log('this is res:', res.data[0].weather.description)
+                    updateUI(res)
+                    daysToDepature()
                 })
                 .catch((error) => {
                 // document.getElementById("Error").innerHTML = `Error: ${error}`;
@@ -136,10 +138,70 @@
 
             })
 
+            function updateUI(e) { 
+                let weather = e.data[0].weather.description;
+                let weather_icon = e.data[0].weather.icon;
+                let temp = e.data[0].temp;
 
 
+                let arrivalDate = document.getElementById('inputDate').value;
+                let country = e.city_name;
+                document.getElementById('header_title').innerHTML = `Weather on ${arrivalDate} in ${country} is:`
 
+                let weather_component = document.getElementById('weather');
+                weather_component.innerHTML = weather;
 
+                let weather_icon_component = document.getElementById('weather_icon');
+                weather_icon_component.outerHTML = `<img src="https://www.weatherbit.io/static/img/icons/${weather_icon}.png" height='50px', width='50px'>` ;
+
+                let temp_component = document.getElementById('temp');
+                temp_component.innerHTML = `${temp}℃`;
+
+                let eta = document.getElementById('ETA');
+                // console.log('loolz',daysToDepature)
+                let eta_value = daysToDepature();
+                eta.innerHTML = `Your trip is in ${eta_value} day/s`
+
+                let weather_card = document.getElementById('weather_card');
+                weather_card.classList.remove("d-none")
+
+                // console.log("weather", weather);
+                // console.log("weather_icon", weather_icon);
+                // console.log("temp", temp);
+
+            }
+
+            // code for today's date 
+            function daysToDepature() {
+
+                var today = new Date();
+                var dd = today.getDate();
+
+                var mm = today.getMonth()+1; 
+                var yyyy = today.getFullYear();
+                if(dd<10) 
+                {
+                    dd='0'+dd;
+                } 
+
+                if(mm<10) 
+                {
+                    mm='0'+mm;
+                } 
+
+                today = yyyy + '-' + mm + '-' + dd;
+
+                var date2 = document.getElementById('inputDate').value; 
+                return date_diff_indays(today,date2)
+            }
+
+            var date_diff_indays = function(date1, date2) {
+                dt1 = new Date(date1);
+                dt2 = new Date(date2);
+                return Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()) ) /(1000 * 60 * 60 * 24));
+            }
+
+            
 
         </script>
     </body>
