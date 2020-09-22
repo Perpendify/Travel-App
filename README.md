@@ -32,7 +32,11 @@ A preview of the webapp is as follows:
 
 <br>
 
-![Alt Text](demonstration.gif)
+Mobile:<br>
+<img src="demonstrationMobile.gif"  style="width:150px;"/>
+
+Desktop:<br>
+<img src="demonstrationDesktop.gif"  style="width:550px;"/>
 
 <br>
 
