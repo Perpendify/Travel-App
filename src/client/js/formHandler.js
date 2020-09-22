@@ -18,7 +18,7 @@ form.addEventListener('submit', (e) => {
     console.log('look here, ben', JSON.stringify(cleanLocation));
 
     async function getPixabay() {
-        const api_url = `http://localhost:8081/pixabay/${cleanLocation}`
+        const api_url = `/pixabay/${cleanLocation}`
         const response = await fetch(api_url);
         const json = await response.json();
         updateImages(json);
@@ -27,7 +27,7 @@ form.addEventListener('submit', (e) => {
     getPixabay()
 
     async function getWeatherbit() {
-        const api_url = `http://localhost:8081/weatherbit/${lat},${lon},${days}`
+        const api_url = `/weatherbit/${lat},${lon},${days}`
         const response = await fetch(api_url);
         const json = await response.json();
         updateUI(json)
