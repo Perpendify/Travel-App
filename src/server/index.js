@@ -1,15 +1,13 @@
-var path = require('path')
+const path = require('path');
 const express = require('express')
 const dotenv = require('dotenv');
 dotenv.config();
 const cors = require('cors');
-const { request } = require('express');
-const axios = require("axios");
-const { send } = require('process');
 const bodyParser = require('body-parser');
 const app = express()
 app.use(cors());
 const fetch = require('node-fetch')
+
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -18,8 +16,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 
-// app.use(express.static('dist'))
-app.use(express.static('src/client/views'))
+app.use(express.static('dist'))
+// app.use(express.static('src/client/views'))
 
 console.log(__dirname)
 
@@ -44,9 +42,8 @@ app.get('/weatherbit/:latlondays', async (request, response) => {
   response.json(json);  
 })
 
-// designates what port the app will listen to for incoming requests
-app.listen(8081, function () {
-    console.log('Example app listening on port 8081!')
-   })
+app.get('/test', async (req, res) => {
+  res.json({message: 'pass!'})
+})
 
-module.exports = {app};
+module.exports = app;

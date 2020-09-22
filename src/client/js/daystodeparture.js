@@ -30,5 +30,4 @@ function daysToDepature() {
 }
 
 
-export { daysToDepature }
-
+export { daysToDepature, date_diff_indays };
