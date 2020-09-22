@@ -1,0 +1,24 @@
+<!doctype html><html lang="en" dir="ltr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"><script src="https://kit.fontawesome.com/c6c40a2192.js" crossorigin="anonymous"></script><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"><title>Travel App</title><link href="main.css" rel="stylesheet"></head><body><main class="row no-gutters"><div class="container p-0 pb-5 bg col-xl-8 d-xl-flex flex-row" id="main_image"><nav class="navbar navbar-default navbar-fixed-top d-xl-inline"><a class="navbar-brand" href="#myPage">Logo</a></nav><h1 class="mt-5 mb-5 ml-3 mt-xl-n align-self-xl-center">Experience<br>peace of mind at<br>your destination</h1><div class="btn_grp_source"><p class="ml-3 img_source"><o id="img_tags"></o><br><o id="img_src"></o></p><div class="ml-3"><div class="img_button d-none activeImage" onclick="Client.selectImage(this)" id="img_button_1"></div><div class="img_button d-none" onclick="Client.selectImage(this)" id="img_button_2"></div><div class="img_button d-none" onclick="Client.selectImage(this)" id="img_button_3"></div><div class="img_button d-none" onclick="Client.selectImage(this)" id="img_button_4"></div></div></div></div><div class="container pt-3 pb-2 btm_card bg-white text-dark main_container col-xl-4 p-3 pt-3 pt-xl-5"><p class="mt-4 mb-4">Find out the weather data when you arrive to your destination</p><form id="form"><div class="form-group"><label for="inputDestination">Destination</label> <input class="form-control mb-3" id="inputDestination" placeholder="Enter Destination" required> <input type="hidden" id="loc_lat"/> <input type="hidden" id="loc_long"/> <label for="inputDate">Arrival Date</label> <input type="date" class="form-control mb-3" id="inputDate" placeholder="Enter Arrival Date" required></div><div class="d-flex align-items-end flex-column"><button type="submit" class="btn btn-primary pl-5 pr-5 mt-2" id="submit1" onclick="Client.loader()" value="">Get Data</button></div></form><div id="map-latlng"></div><hr class="mt-4 mb-4"><div class="spinner-border text-primary d-none" role="status" id="loader"><span class="sr-only">Loading...</span></div><h6 id="header_title"></h6><div class="container p-2 mb-2 mt-4 bg-primary text-white rounded d-none" id="weather_card"><div class="row"><div class="col-7 ml-2"><div id="weather_icon" class="weather_ icon"></div><h6 id="weather"></h6></div><div class="col-4"><h2 id="temp"></h2></div></div></div><div id="ETA"></div><div class="mt-5 text-muted"><small>Ben Erwin Udacity Capstone</small></div><span><a href="https://www.linkedin.com/in/benjamin-erwin/" target="_blank"><i class="fab fa-linkedin"></i></a> <a href="https://github.com/Perpendify" target="_blank"><i class="fab fa-github-square"></i></a> <a href="mailto:winwongyongzhi@gmail.com" target="_blank"><i class="fas fa-envelope-square"></i></a></span></div></main><script>// Check that service workers are supported
+            if ('serviceWorker' in navigator) {
+              // Use the window load event to keep the page load performant
+              window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js');
+              });
+            }</script><script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsuZthVBlmKqyQDMh8NXtAwCrLbNaMkDk&libraries=places"></script><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script><script>var searchInput = 'inputDestination';
+            // Code to allow auto fill by google places API
+            var autocomplete;
+            autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
+                types: ['geocode'],
+            });
+
+            function getLatLon(){
+                var near_place = autocomplete.getPlace();
+                document.getElementById('loc_lat').value = near_place.geometry.location.lat();
+                document.getElementById('loc_long').value = near_place.geometry.location.lng();
+
+                let lat = near_place.geometry.location.lat();
+                let lon = near_place.geometry.location.lng();
+                return [lat,lon];
+            }
+            
+            google.maps.event.addListener(autocomplete, 'place_changed', getLatLon);;</script><script src="main.js"></script></body></html>
