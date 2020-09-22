@@ -4,7 +4,7 @@
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+        <script src="https://kit.fontawesome.com/c6c40a2192.js" crossorigin="anonymous"></script>
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
         <title>Travel App</title>
@@ -23,16 +23,16 @@
                 <div class="btn_grp_source">
                     <p class="ml-3 img_source"><o id="img_tags"></o><br> <o id="img_src"></o></p>
                     <div class="ml-3">
-                        <div class="img_button d-none activeImage" onclick=selectImage(this) id="img_button_1"></div>
-                        <div class="img_button d-none" onclick=selectImage(this) id="img_button_2"></div>
-                        <div class="img_button d-none" onclick=selectImage(this) id="img_button_3"></div>
-                        <div class="img_button d-none" onclick=selectImage(this) id="img_button_4"></div>
+                        <div class="img_button d-none activeImage" onclick=Client.selectImage(this) id="img_button_1"></div>
+                        <div class="img_button d-none" onclick=Client.selectImage(this) id="img_button_2"></div>
+                        <div class="img_button d-none" onclick=Client.selectImage(this) id="img_button_3"></div>
+                        <div class="img_button d-none" onclick=Client.selectImage(this) id="img_button_4"></div>
                         
                     </div>
                 </div>
             </div>
             <div class="container pt-3 pb-2 btm_card bg-white text-dark main_container col-xl-4 p-3 pt-3 pt-xl-5 ">
-                <p class="mt-4 mb-4">Find out the weather data when you arrive to your destignation</p>
+                <p class="mt-4 mb-4">Find out the weather data when you arrive to your destination</p>
                 <form id="form">
                     <div class="form-group">
                         <label for="inputDestination">Destination</label>
@@ -43,7 +43,7 @@
                       <input type="date" class="form-control mb-3" id="inputDate" placeholder="Enter Arrival Date" required>
                     </div>
                     <div class="d-flex align-items-end flex-column">
-                        <button type="submit" class="btn btn-primary pl-5 pr-5 mt-2" id="submit1" onclick=loader() value="">Get Data</button>    
+                        <button type="submit" class="btn btn-primary pl-5 pr-5 mt-2" id="submit1" onclick=Client.loader() value="">Get Data</button>    
                     </div>
                 </form>
                 <div id="map-latlng"></div>
@@ -60,17 +60,18 @@
 
                     <div class="row">
                         <div class="col-7 ml-2">
-                            <div id="weather_icon" class="weather_ icon">icon here</div>
-                            <h6 id="weather">Sunny</h6>
+                            <div id="weather_icon" class="weather_ icon"></div>
+                            <h6 id="weather"></h6>
                         </div>
                         <div class="col-4">
-                            <h2 id="temp">32º</h2>
+                            <h2 id="temp"></h2>
                         </div>
                     </div>
                 </div>
                 <div id="ETA"></div>
 
                 <div class="mt-5 text-muted"><small> Ben Erwin Udacity Capstone </small></div>
+                <span><a href="https://www.linkedin.com/in/benjamin-erwin/"><i class="fab fa-linkedin"></i></a> <a href="mailto:winwongyongzhi@gmail.com"><i class="fas fa-envelope-square"></i></a></span>
             </div>
 
         </main>
@@ -86,14 +87,12 @@
         </script> -->
 
         <!-- note: apikey is restricted -->
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&libraries=places"></script>
-        <!-- obtains lat and lon of searched location -->
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsuZthVBlmKqyQDMh8NXtAwCrLbNaMkDk&libraries=places"></script>
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script>
             var searchInput = 'inputDestination';
-
-    
+            // Code to allow auto fill by google places API
             var autocomplete;
             autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
                 types: ['geocode'],
@@ -110,194 +109,7 @@
             }
             
             google.maps.event.addListener(autocomplete, 'place_changed', getLatLon);;
-            
-
-            const form = document.getElementById('form')
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                let lat = getLatLon()[0];
-                let lon = getLatLon()[1]
-                let days = String(daysToDepature() + 1);
-                // console.log('days',days)
-                // console.log(lat, lon)
-
-                // var location = document.getElementById('inputDestination');
-                var location = document.getElementById('inputDestination');
-                var cleanLocation = location.value.split(' ').join('+').split(',').join('');
-                console.log(cleanLocation);
-                fetch(`https://pixabay.com/api/?key=&q=${cleanLocation}&image_type=photo`)
-                .then((res) => res.json())
-                .then((res) => {
-                    // console.log("dis res:",res);
-                    // console.log('this is res:', res.data[0].weather.description)
-                    updateImages(res);
-                    window.pixabay = res;
-                })
-                .catch((error) => {
-                // document.getElementById("Error").innerHTML = `Error: ${error}`;
-                console.log('this is error', error);
-                });
-
-
-                return fetch(`https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&days=${days}&key=`)
-                .then((res) => res.json())
-                .then((res) => {
-                    // console.log(res);
-                    // console.log('this is res:', res.data[0].weather.description)
-                    updateUI(res)
-                    document.getElementById('loader').classList.add("d-none");
-                    daysToDepature()
-                    window.weatherbit = res;
-                    console.log(weatherbit)
-                })
-                .catch((error) => {
-                // document.getElementById("Error").innerHTML = `Error: ${error}`;
-                console.log('this is error', error);
-                });
-
-            })
-
-            function updateUI(e) { 
-                forecast = String(daysToDepature());
-                let weather_card = document.getElementById('weather_card');
-                let eta = document.getElementById('ETA');
-                let header_title = document.getElementById('header_title')
-                let weather_component = document.getElementById('weather');
-                let weather_icon_component = document.getElementById('weather_icon');
-                let arrivalDate = document.getElementById('inputDate').value;
-
-
-                if (forecast < 1 || forecast >16 ){
-                    header_title.innerHTML = "";
-                    weather_card.innerHTML = "No weather data for the selected date";
-                    eta.innerHTML = "";
-                } else {
-                    let weather = e.data[forecast].weather.description;
-                    let weather_icon = e.data[forecast].weather.icon;
-                    let temp = e.data[forecast].temp;
-
-                    // console.log('this is the new e', e);
-
-                    let country = e.city_name;
-                    header_title.innerHTML = `Weather on ${arrivalDate} in ${country} is:`;
-
-                    weather_component.innerHTML = weather;
-
-                    weather_icon_component.innerHTML = `<img src="https://www.weatherbit.io/static/img/icons/${weather_icon}.png" height='50px', width='50px'>` ;
-
-                    let temp_component = document.getElementById('temp');
-                    temp_component.innerHTML = `${temp}℃`;
-
-                    // console.log('loolz',daysToDepature)
-                    let eta_value = daysToDepature();
-                    eta.innerHTML = `Your trip is in ${eta_value} day/s`;
-
-                    weather_card.classList.remove("d-none");
-
-                // let card_loader = document.getElementById('card_loader');
-                // card_loader.classList.add("d-none")
-
-                // console.log("weather", weather);
-                // console.log("weather_icon", weather_icon);
-                // console.log("temp", temp);
-                 }
-            }
-
-            // code for today's date 
-            function daysToDepature() {
-
-                var today = new Date();
-                var dd = today.getDate();
-
-                var mm = today.getMonth()+1; 
-                var yyyy = today.getFullYear();
-                if(dd<10) 
-                {
-                    dd='0'+dd;
-                } 
-
-                if(mm<10) 
-                {
-                    mm='0'+mm;
-                } 
-
-                today = yyyy + '-' + mm + '-' + dd;
-
-                var date2 = document.getElementById('inputDate').value; 
-                return date_diff_indays(today,date2)
-            }
-
-            var date_diff_indays = function(date1, date2) {
-                dt1 = new Date(date1);
-                dt2 = new Date(date2);
-                return Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()) ) /(1000 * 60 * 60 * 24));
-            }
-
-            function updateImages(e) {
-                // console.log('this is e', e.hits);
-
-                if (e.hits.length != 0) {
-                // console.log('this is e', e.hits[0].largeImageURL);
-                main_image = document.getElementById('main_image');
-                img_button_1 = document.getElementById('img_button_1');
-                img_button_2 = document.getElementById('img_button_2');
-                img_button_3 = document.getElementById('img_button_3');
-                img_button_4 = document.getElementById('img_button_4');
-               
-                img_button_1.classList.remove("d-none")
-                img_button_2.classList.remove("d-none")
-                img_button_3.classList.remove("d-none")
-                img_button_4.classList.remove("d-none")
-
-                main_image.style.backgroundImage = `linear-gradient(0deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),url(${e.hits[0].largeImageURL})`;
-                img_button_1.style.backgroundImage = `url(${e.hits[0].largeImageURL})`;
-                img_button_2.style.backgroundImage = `url(${e.hits[1].largeImageURL})`;
-                img_button_3.style.backgroundImage = `url(${e.hits[2].largeImageURL})`;
-                img_button_4.style.backgroundImage = `url(${e.hits[3].largeImageURL})`;
-
-
-                img_tags = document.getElementById('img_tags');
-                img_src = document.getElementById('img_src');
-                img_src.innerHTML = `Photo by ${e.hits[0].user}`;
-                img_tags.innerHTML = e.hits[0].tags
-
-                }
-                else {
-                    document.getElementById('img_tags').innerHTML = "No image available"
-                }
-            }
-
-            function selectImage(e) {
-                main_image = document.getElementById('main_image');
-
-                // console.log('asdfasdfasdf',e)
-                // console.log('e.split(', e.id.split('_')[2])
-                main_image.style.backgroundImage = `linear-gradient(0deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), ${e.style.backgroundImage}`;  
-                document.querySelector(".activeImage").classList.remove("activeImage")
-                e.classList.add("activeImage")
-
-                // console.log('onclick',e);
-                // console.log('this is pixabay', pixabay)
-
-                arrayNo = e.id.split('_')[2]-1;
-                document.querySelector("#img_tags").innerHTML = `Photo by ${pixabay.hits[arrayNo].user}`; 
-                document.querySelector("#img_src").innerHTML = `${pixabay.hits[arrayNo].tags}`; 
-
-
-
-            }
-
-            function loader(){ 
-                document.getElementById('loader').classList.remove("d-none");
-            }
-      
-            // PIXABAY API CALL HERE
         </script>
 
-        <script> 
-
-
- 
-        </script>
     </body>
 </html>
