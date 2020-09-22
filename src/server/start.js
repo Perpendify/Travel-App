@@ -1,6 +1,6 @@
-const app = require('./index');
+// const {app} = require('../server/index');
 
-// designates what port the app will listen to for incoming requests
-app.listen(8081, function () {
-    console.log('Example app listening on port 8081!')
-   })
+// // designates what port the app will listen to for incoming requests
+// app.listen(8081, function () {
+//     console.log('Example app listening on port 8081!')
+//    })

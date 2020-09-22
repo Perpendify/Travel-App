@@ -46,4 +46,9 @@ app.get('/test', async (req, res) => {
   res.json({message: 'pass!'})
 })
 
+app.listen(8081, function () {
+  console.log('Example app listening on port 8081!')
+ })
+
+
 module.exports = app;
