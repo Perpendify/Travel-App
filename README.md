@@ -33,10 +33,10 @@ A preview of the webapp is as follows:
 <br>
 
 Mobile:<br>
-<img src="demonstrationMobile.gif"  style="width:150px;"/>
+<img src="demonstrationMobile.gif"  style="width:100px;"/>
 
 Desktop:<br>
-<img src="demonstrationDesktop.gif"  style="width:550px;"/>
+<img src="demonstrationDesktop.gif"  style="width:300px;"/>
 
 <br>
 
