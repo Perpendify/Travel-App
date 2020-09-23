@@ -1,7 +1,6 @@
 # Travel-App
 Udacity Capstone project – To build a travel app 
 
-
 <br>
 
 
@@ -80,6 +79,8 @@ Sign up for api keys and place them in .env file
 weatherbit_api = ${YOUR API KEY}
 
 API_pixabay = ${YOUR API KEY}
+
+NOTE: I've removed the google places API as the project has ended. So you can change the search bar to a normal text field, and geolocate through geonames API. I didn't use geonames api as they did not provide the features I was looking for. 
 
 
 ### Installation
